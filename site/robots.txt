@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gayratov.dev/sitemap.xml
