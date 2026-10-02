@@ -7,6 +7,13 @@ RUN adduser -D -H -u 10001 portfolio
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY --chown=portfolio:portfolio site /usr/share/nginx/html
 
+# Stamp CSS/JS links with a content hash so Cloudflare and browsers fetch the
+# new file after every change instead of serving a stale cached copy.
+RUN cd /usr/share/nginx/html \
+ && css=$(md5sum styles.css | cut -c1-8) \
+ && js=$(md5sum script.js | cut -c1-8) \
+ && sed -i -e "s|/styles.css\"|/styles.css?v=$css\"|" -e "s|/script.js\"|/script.js?v=$js\"|" *.html
+
 USER portfolio
 EXPOSE 8181
 
